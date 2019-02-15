@@ -8,10 +8,8 @@ import Vuex from 'vuex';
 import 'ant-design-vue/dist/antd.css';
 import 'babel-polyfill';
 import Antd from 'ant-design-vue';
-import http from '@/axios/http.js';
 
 Vue.config.productionTip = false;
-Vue.prototype.http = http;
 
 Vue.use(Vuex);
 Vue.use(Antd);
