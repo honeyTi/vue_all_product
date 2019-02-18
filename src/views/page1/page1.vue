@@ -3,6 +3,7 @@
   <div>
     <button @click="setName(nameChange)">修改名字</button>
     <button @click="setAge(312312)">修改年龄</button>
+    <button @click="msg">提示内容</button>
     <div>
       {{name}} - {{age}}
     </div>
@@ -24,7 +25,10 @@ export default {
       setName: "SET_NAME",
       setAge: "SET_AGE"
     }),
-    ...mapActions(["nameAsyn"])
+    ...mapActions(["nameAsyn"]),
+    msg () {
+      this.$message.info('This is a normal message');
+    }
   },
   mounted() {
     this.http
