@@ -1,45 +1,39 @@
 <!-- page1map -->
 <template>
   <div>
-    <button @click="setName(nameChange)">修改名字</button>
-    <button @click="setAge(312312)">修改年龄</button>
-    <button @click="msg">提示内容</button>
+    <button>修改名字</button>
+    <button>修改年龄</button>
+    <button>提示内容</button>
     <div>
-      {{name}} - {{age}}
+      {{nameChange}}
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
       nameChange: "John"
     };
   },
-  computed: {
-    ...mapGetters(["name", "age"])
-  },
-  methods: {
-    ...mapMutations({
-      setName: "SET_NAME",
-      setAge: "SET_AGE"
-    }),
-    ...mapActions(["nameAsyn"]),
-    msg () {
-      this.$message.info('This is a normal message');
-    }
-  },
+  methods: {},
   mounted() {
-    this.http
-      .get("/index/GetCharts", {
-        types: "总体",
-        timeStart: "2016-12-01 00:00:00",
-        timeEnd: "2016-12-01 00:00:00"
-      })
+    var start = "2016-12-01" + " 00:00:00";
+    var end = "2018-12-01" + " 00:00:00";
+    this.$api
+      .getCharts("总体", start, end)
       .then(res => {
+        if (res.Code === 0) {
+          // eslint-disable-next-line no-console
+          console.log(res.Data);
+        } else {
+          // eslint-disable-next-line no-console
+          console.log(res.Data);
+        }
+      })
+      .catch(error => {
         // eslint-disable-next-line no-console
-        console.log(res.data);
+        console.log(error);
       });
   }
 };

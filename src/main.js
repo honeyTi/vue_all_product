@@ -8,11 +8,13 @@ import Vuex from 'vuex';
 import 'ant-design-vue/dist/antd.css';
 import 'babel-polyfill';
 import Antd from 'ant-design-vue';
+import api from './http/index';
 
 Vue.config.productionTip = false;
 
 Vue.use(Vuex);
 Vue.use(Antd);
+Vue.use(api);
 
 /* eslint-disable no-new */
 new Vue({
