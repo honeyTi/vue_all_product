@@ -9,6 +9,8 @@ import 'ant-design-vue/dist/antd.css';
 import 'babel-polyfill';
 import Antd from 'ant-design-vue';
 import api from './http/index';
+import ChartMap from '@/components/chart-map/chart-list'
+
 
 Vue.config.productionTip = false;
 
@@ -21,6 +23,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: { App, ChartMap },
   template: '<App/>'
 });
