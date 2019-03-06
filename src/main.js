@@ -9,16 +9,16 @@ import 'ant-design-vue/dist/antd.css';
 import 'babel-polyfill';
 import Antd from 'ant-design-vue';
 import api from './http/index';
-import ChartMap from '@/components/chart-map/chart-list'
-
+import ChartMap from '@/components/chart-map/chart-list';
+import echarts from 'echarts';
 
 Vue.config.productionTip = false;
+Vue.prototype.$echarts = echarts;
 
 Vue.use(Vuex);
 Vue.use(Antd);
 Vue.use(api);
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,

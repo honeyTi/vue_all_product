@@ -7,10 +7,12 @@
     <div class="content">
       <div class="map-left">
         <chart-map width='24.74vw' height="36vh" title='数据测试内容'>
-        <div>
-          测试文字发id赛
-          十大减肥了大数据反对
-        </div>
+          <div class="chart-out" id="bar-map">
+          </div>
+        </chart-map>
+        <chart-map width='24.74vw' height="36vh" title='数据测试内容' id="left-map">
+          <div class="chart-out" id="line-map">
+          </div>
         </chart-map>
       </div>
       <div class="map-center">
@@ -91,6 +93,14 @@ export default {
       .map-left {
         width: 24.74vw;
         height: 73.8vh;
+        .chart-out {
+          height: 30vh;
+          font-size: 20px;
+          color: #fff;
+        }
+        #left-map {
+          margin-top: 1.8vh;
+        }
       }
       .map-center {
         width: 36.7vw;

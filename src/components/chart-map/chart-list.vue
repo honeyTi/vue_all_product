@@ -4,6 +4,7 @@
     <h2 class="title">
       {{title}}
     </h2>
+    <slot></slot>
   </div>
 </template>
 
@@ -30,13 +31,12 @@ export default {
       height: 49px;
       line-height: 49px;
     }
-    .inline-template {
+    slot {
       width: 100%;
       height: calc(100% - 49px);
-    }
-    .inline-template>div {
-      width: 100%;
-      height: 100%;
+      div {
+        width: 100%;
+      }
     }
   }
 </style>
