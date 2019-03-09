@@ -11,6 +11,7 @@ import Antd from 'ant-design-vue';
 import api from './http/index';
 import ChartMap from '@/components/chart-map/chart-list';
 import echarts from 'echarts';
+import '@/assets/font/iconfont.css';
 
 Vue.config.productionTip = false;
 Vue.prototype.$echarts = echarts;
