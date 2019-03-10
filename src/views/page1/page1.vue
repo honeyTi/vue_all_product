@@ -9,7 +9,7 @@
         <chart-map
           width="24.74vw"
           height="36vh"
-          title="数据测试内容"
+          title="网络零售额当期前十省份排名"
           icon="icon"
           iconfont="icon-leijiline"
         >
@@ -19,7 +19,7 @@
           <div class="chart-out" id="line-map"></div>
         </chart-map>
       </div>
-      <div class="map-center"></div>
+      <div class="map-center" id="bar-map-center"></div>
       <div class="map-right"></div>
     </div>
   </div>
@@ -34,15 +34,251 @@ export default {
   },
   methods: {
     getMapData() {
-      let timeEnd = "2018-12-01"+" 00:00:00";
+      let timeEnd = "2018-12-01" + " 00:00:00";
       this.$api.getMapChart("省市", timeEnd).then(res => {
         if (res.Code === 0) {
           // eslint-disable-next-line no-console
           console.log(res.Data);
+          this.mapDataReset(res.Data);
         } else {
           // eslint-disable-next-line no-console
           console.log(res.Data);
         }
+      });
+    },
+    // 地图数据处理
+    mapDataReset(data) {
+      var date = [],
+        dataResetMap = [];
+      data.forEach(function(ele) {
+        date.push(ele.DataMonth.split("T")[0]);
+      });
+      date = this._.uniq(date);
+      date.forEach(function(ele) {
+        dataResetMap.push({
+          date: ele,
+          map: []
+        });
+      });
+      dataResetMap.forEach(function(list) {
+        data.forEach(function(ele) {
+          if (ele.DataMonth.split("T")[0] === list.date) {
+            list.map.push({
+              name:
+                ele.Name.indexOf("省") !== -1
+                  ? ele.Name.split("省")[0]
+                  : ele.Name.indexOf("内蒙古") !== -1
+                  ? "内蒙古"
+                  : ele.Name.substring(0, 2),
+              value: (ele.OrCur / 100000000).toFixed(2)
+            });
+          }
+        });
+      });
+      var dom = this.$echarts.init(document.getElementById("bar-map-center"));
+      this.mapCharts(dom, date, dataResetMap, "各省份当期网络零售额绝对量");
+    },
+    mapCharts(dom, date, dataMap, title) {
+      var seriseMap = [];
+      dataMap.forEach(function(ele) {
+        seriseMap.push({
+          series: {
+            name: ele.date,
+            type: "map",
+            mapType: "china",
+            label: {
+              normal: {
+                show: false
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            data: ele.map
+          }
+        });
+      });
+      dom.clear();
+      dom.setOption({
+        baseOption: {
+          timeline: {
+            // y: 0,
+            axisType: "category",
+            autoPlay: true,
+            playInterval: 2000,
+            data: date,
+            bottom: "5%",
+            label: {
+              color: "#8adaff"
+            }
+          },
+          tooltip: {},
+          title: {
+            text: title,
+            left: "center",
+            top: "6%",
+            textStyle: {
+              color: "#8adaff",
+              fontSize: "32"
+            }
+          },
+          visualMap: {
+            min: 0,
+            max: 500,
+            left: "2%",
+            bottom: "4%",
+            text: ["高", "低"],
+            inRange: {
+              color: ["#6FCF6A", "#FFFD64", "#FF5000"]
+            },
+            textStyle: {
+              color: "#8adaff"
+            }
+          },
+          geo: {
+            map: "china",
+            roam: true,
+            label: {
+              normal: {
+                show: true,
+                textStyle: {
+                  color: "#fff"
+                }
+              },
+              emphasis: {
+                show: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                areaColor: "transparent",
+                borderColor: "#3fdaff",
+                borderWidth: 2,
+                shadowColor: "rgba(63, 218, 255, 0.5)",
+                shadowBlur: 30
+              },
+              emphasis: {
+                areaColor: "#2B91B7"
+              }
+            }
+          },
+          series: [
+            {
+              name: "",
+              type: "map",
+              geoIndex: 0,
+              data: []
+            }
+          ]
+        },
+        options: seriseMap
+      });
+      var dom1 = this.$echarts.init(document.getElementById("bar-map"));
+      dom.on("timelinechanged", params => {
+        this.barOption(dom1, dataMap[params.currentIndex]);
+      });
+      this.barOption(dom1, dataMap[0]);
+    },
+    barOption(echartsDom, data) {
+      let bar = [],
+        xAisData = [];
+      let list = this._.sortBy(data.map, function(arr) {
+        return -arr.value;
+      });
+      list.slice(0, 10).forEach(function(ele) {
+        bar.push(ele.value);
+        xAisData.push(ele.name);
+      });
+      echartsDom.setOption({
+        tooltip: {
+          trigger: "axis"
+        },
+        grid: {
+          top: "13%",
+          right: "15%",
+          left: "15%",
+          bottom: "10%"
+        },
+        yAxis: {
+          type: "category",
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+              show: false
+          },
+          splitArea: {
+              show: false
+          },
+          data: xAisData.reverse(),
+          axisLabel: {
+            textStyle: {
+              color: "#9faeb5",
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#4d4d4d"
+            }
+          }
+        },
+        xAxis: [
+            {
+              axisTick: {
+              show: false
+            },
+            splitLine: {
+                show: false
+            },
+            splitArea: {
+                show: false
+            },
+            position: "top",
+            type: "value",
+            axisLabel: {
+              textStyle: {
+                color: "#9faeb5",
+                fontSize: 16
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: "#4d4d4d"
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: "绝对量",
+            type: "bar",
+            barWidth: "50%",
+            itemStyle: {
+              normal: {
+                color: {
+                  type: "linear",
+                  x: 1,
+                  y: 0,
+                  x2: 0,
+                  y2: 0,
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "#00d386" // 0% 处的颜色
+                    },
+                    {
+                      offset: 1,
+                      color: "#0076fc" // 100% 处的颜色
+                    }
+                  ],
+                  globalCoord: false // 缺省为 false
+                },
+                barBorderRadius: 15
+              }
+            },
+            data: bar.reverse()
+          }
+        ]
       });
     }
   },

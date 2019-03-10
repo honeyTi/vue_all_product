@@ -13,6 +13,8 @@ import ChartMap from '@/components/chart-map/chart-list';
 import echarts from 'echarts';
 import '@/assets/font/iconfont.css';
 import _ from 'lodash';
+import '../node_modules/echarts/map/js/china';
+
 
 Vue.config.productionTip = false;
 Vue.prototype.$echarts = echarts;
