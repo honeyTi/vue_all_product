@@ -2,6 +2,7 @@
 <template>
   <div class="charts" v-bind:style="{ width: width, height: height }">
     <h2 class="title">
+      <span :class="[icon, iconfont]"></span>
       {{title}}
     </h2>
     <slot></slot>
@@ -9,14 +10,19 @@
 </template>
 
 <script>
+/* eslint-disable */
+import echarts from 'echarts';
+import '../../../node_modules/echarts/map/js/china.js';
 export default {
   name: 'chartMap',
   data () {
     return {
     };
   },
-  props :['width', 'height', 'title'],
-  methods: {}
+  props :['width', 'height', 'title','icon', 'iconfont'],
+  methods: {
+    
+  }
 }
 
 </script>

@@ -10,6 +10,13 @@ export const getCharts = (type, date1, date2) => {
   });
 };
 
+export const getMapChart = (prov, timeEnd) => {
+  return axios({
+    url: `/area/getMapData?prov=${prov}&timeEnd=${timeEnd}`,
+    method: 'get'
+  })
+};
+
 export const list = id => {
   return axios({
     url: `/list${id}`,
@@ -29,5 +36,6 @@ export const upload = data => {
 export default {
   getCharts,
   list,
-  upload
+  upload,
+  getMapChart
 };

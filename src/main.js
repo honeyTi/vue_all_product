@@ -12,9 +12,11 @@ import api from './http/index';
 import ChartMap from '@/components/chart-map/chart-list';
 import echarts from 'echarts';
 import '@/assets/font/iconfont.css';
+import _ from 'lodash';
 
 Vue.config.productionTip = false;
 Vue.prototype.$echarts = echarts;
+Vue.prototype._ = _;
 
 Vue.use(Vuex);
 Vue.use(Antd);
