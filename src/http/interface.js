@@ -17,25 +17,16 @@ export const getMapChart = (prov, timeEnd) => {
   })
 };
 
-export const list = id => {
+export const intotal = (type, timeStart, timeEnd) => {
   return axios({
-    url: `/list${id}`,
+    url: `/index/GetCharts?types=${type}&timeStart=${timeStart}&timeEnd=${timeEnd}`,
     method: 'get'
-  });
-};
-
-export const upload = data => {
-  return axios({
-    url: '/upload',
-    method: 'post',
-    data
-  });
-};
+  })
+}
 
 // 默认全部导出
 export default {
   getCharts,
-  list,
-  upload,
-  getMapChart
+  getMapChart,
+  intotal
 };

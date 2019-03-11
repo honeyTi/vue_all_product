@@ -15,12 +15,39 @@
         >
           <div class="chart-out" id="bar-map"></div>
         </chart-map>
-        <chart-map width="24.74vw" height="36vh" title="数据测试内容" id="left-map">
+        <chart-map
+          width="24.74vw"
+          height="36vh"
+          title="数据测试内容"
+          icon="icon"
+          iconfont="icon-leiji"
+          id="left-map"
+        >
           <div class="chart-out" id="line-map"></div>
         </chart-map>
       </div>
       <div class="map-center" id="bar-map-center"></div>
-      <div class="map-right"></div>
+      <div class="map-right">
+        <chart-map
+          width="24.74vw"
+          height="36vh"
+          title="网络零售额当期走势"
+          icon="icon"
+          iconfont="icon-duowei"
+          id="map-right"
+        >
+          <div class="chart-out" id="bar-map-3"></div>
+        </chart-map>
+        <chart-map
+          width="24.74vw"
+          height="36vh"
+          title="实用商品网络零售额当期走势图"
+          icon="icon"
+          iconfont="icon-dangqiline"
+        >
+          <div class="chart-out" id="bar-map-4"></div>
+        </chart-map>
+      </div>
     </div>
   </div>
 </template>
@@ -205,15 +232,15 @@ export default {
             show: false
           },
           splitLine: {
-              show: false
+            show: false
           },
           splitArea: {
-              show: false
+            show: false
           },
           data: xAisData.reverse(),
           axisLabel: {
             textStyle: {
-              color: "#9faeb5",
+              color: "#9faeb5"
             }
           },
           axisLine: {
@@ -223,15 +250,15 @@ export default {
           }
         },
         xAxis: [
-            {
-              axisTick: {
+          {
+            axisTick: {
               show: false
             },
             splitLine: {
-                show: false
+              show: false
             },
             splitArea: {
-                show: false
+              show: false
             },
             position: "top",
             type: "value",
@@ -280,6 +307,157 @@ export default {
           }
         ]
       });
+    },
+    // 柱图总计
+    barTotal() {
+      let timeStart = "2016-06-01" + " 00:00:00";
+      let timeEnd = "2018-12-01" + " 00:00:00";
+      this.$api.intotal("总体", timeStart, timeEnd).then(res => {
+        if (res.Code === 0) {
+          this.dataReset(res.Data);
+        }
+      });
+    },
+    dataReset(data) {
+      let barDom1 = this.$echarts.init(document.getElementById("bar-map-3"));
+      let barDom2 = this.$echarts.init(document.getElementById("bar-map-4"));
+      let map1 = {
+        date: [],
+        bar: [],
+        line: []
+      };
+      let map2 = {
+        date: [],
+        bar: [],
+        line: []
+      };
+      data.forEach((ele) => {
+        map1.bar.push(ele.OrCur / 100000000);
+        map1.line.push(ele.OrCurYoy);
+        map1.date.push(ele.DataMonth.split("T")[0]);
+        map2.date.push(ele.DataMonth.split("T")[0]);
+        map2.bar.push(ele.KindCur / 100000000);
+        map2.line.push(ele.KindCurYoy);
+      });
+      this.barOption2(
+        barDom1,
+        map1.date,
+        map1.bar,
+        map1.line
+      );
+      this.barOption2(
+        barDom2,
+        map2.date,
+        map2.bar,
+        map2.line
+      );
+    },
+    barOption2(echartsDom, date, bar, line) {
+      echartsDom.clear();
+      echartsDom.setOption({
+        tooltip: {
+          trigger: "axis"
+        },
+        grid: {
+          top: "13%",
+          right: "15%",
+          left: "15%",
+          bottom: "10%"
+        },
+        xAxis: {
+          type: "category",
+          data: date,
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: false
+          },
+          splitArea: {
+            show: false
+          },
+          axisLabel: {
+            textStyle: {
+              color: "#9faeb5"
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#4d4d4d"
+            }
+          }
+        },
+        yAxis: [
+          {
+            type: "value",
+            axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: false
+          },
+          splitArea: {
+            show: false
+          },
+          axisLabel: {
+            textStyle: {
+              color: "#9faeb5"
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#4d4d4d"
+            }
+          }
+          },
+          {
+            type: "value",
+            axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: false
+          },
+          splitArea: {
+            show: false
+          },
+          axisLabel: {
+            textStyle: {
+              color: "#9faeb5"
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#4d4d4d"
+            }
+          }
+          }
+        ],
+        series: [
+          {
+            name: "绝对量",
+            type: "bar",
+            barWidth: "50%",
+            itemStyle: {
+              barBorderRadius: 5,
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#00d386" },
+                { offset: 1, color: "#0076fc" }
+              ])
+            },
+            data: bar
+          },
+          {
+            name: "占比",
+            yAxisIndex: 1,
+            type: "line",
+            data: line,
+            itemStyle: {
+              color: "#e4393c"
+            }
+          }
+        ]
+      });
     }
   },
   components: {
@@ -287,6 +465,7 @@ export default {
   },
   mounted() {
     this.getMapData();
+    this.barTotal();
   }
 };
 </script>
@@ -344,6 +523,14 @@ export default {
     .map-right {
       width: 24.74vw;
       height: 73.8vh;
+      #map-right {
+        margin-bottom: 1.8vh;
+      }
+      #bar-map-3,
+      #bar-map-4 {
+        height: 30vh;
+        font-size: 20px;
+      }
     }
   }
 }
