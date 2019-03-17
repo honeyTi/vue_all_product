@@ -18,12 +18,12 @@
         <chart-map
           width="24.74vw"
           height="36vh"
-          title="数据测试内容"
+          title="网络零售额累计走势"
           icon="icon"
           iconfont="icon-leiji"
           id="left-map"
         >
-          <div class="chart-out" id="line-map"></div>
+          <div class="chart-out" id="bar-map-2"></div>
         </chart-map>
       </div>
       <div class="map-center" id="bar-map-center"></div>
@@ -226,13 +226,17 @@ export default {
           trigger: "axis"
         },
         grid: {
-          top: "13%",
-          right: "15%",
-          left: "15%",
+          top: "20%",
+          right: "25%",
+          left: "13%",
           bottom: "10%"
         },
         yAxis: {
           type: "category",
+          name: '地区',
+            nameTextStyle:{
+              color: "#9faeb5",
+            },
           axisTick: {
             show: false
           },
@@ -256,6 +260,10 @@ export default {
         },
         xAxis: [
           {
+            name: '单位（亿元）',
+            nameTextStyle:{
+              color: "#9faeb5",
+            },
             axisTick: {
               show: false
             },
@@ -326,12 +334,18 @@ export default {
     dataReset(data) {
       let barDom1 = this.$echarts.init(document.getElementById("bar-map-3"));
       let barDom2 = this.$echarts.init(document.getElementById("bar-map-4"));
+      let barDom3 = this.$echarts.init(document.getElementById("bar-map-2"));
       let map1 = {
         date: [],
         bar: [],
         line: []
       };
       let map2 = {
+        date: [],
+        bar: [],
+        line: []
+      };
+      let map3 = {
         date: [],
         bar: [],
         line: []
@@ -343,6 +357,9 @@ export default {
         map2.date.push(ele.DataMonth.split("T")[0]);
         map2.bar.push(ele.KindCur / 100000000);
         map2.line.push(ele.KindCurYoy);
+        map3.date.push(ele.DataMonth.split("T")[0]);
+        map3.bar.push(ele.OrAcc / 100000000);
+        map3.line.push(ele.OrAccYoy);
       });
       this.barOption2(
         barDom1,
@@ -355,6 +372,12 @@ export default {
         map2.date,
         map2.bar,
         map2.line
+      );
+      this.barOption2(
+        barDom3,
+        map3.date,
+        map3.bar,
+        map3.line
       );
     },
     barOption2(echartsDom, date, bar, line) {
@@ -370,7 +393,11 @@ export default {
           bottom: "20%"
         },
         xAxis: {
+          name: '时间',
           type: "category",
+          nameTextStyle:{
+              color: "#9faeb5",
+            },
           data: date,
           axisTick: {
             show: false
@@ -395,6 +422,10 @@ export default {
         yAxis: [
           {
             type: "value",
+            name: '单位（亿元）',
+            nameTextStyle:{
+              color: "#9faeb5",
+            },
             axisTick: {
             show: false
           },
@@ -417,6 +448,10 @@ export default {
           },
           {
             type: "value",
+            name: '单位（%）',
+            nameTextStyle:{
+              color: "#9faeb5",
+            },
             axisTick: {
             show: false
           },
