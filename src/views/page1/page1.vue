@@ -205,6 +205,11 @@ export default {
         this.barOption(dom1, dataMap[params.currentIndex]);
       });
       this.barOption(dom1, dataMap[0]);
+      dom.on('click', (params) => {
+        // eslint-disable-next-line no-console
+        // console.log(params.name);
+        this.$router.push({name: 'page2', params: {city: params.name}});
+      })
     },
     barOption(echartsDom, data) {
       let bar = [],
@@ -362,7 +367,7 @@ export default {
           top: "13%",
           right: "15%",
           left: "15%",
-          bottom: "10%"
+          bottom: "20%"
         },
         xAxis: {
           type: "category",

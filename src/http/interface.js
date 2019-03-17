@@ -24,9 +24,25 @@ export const intotal = (type, timeStart, timeEnd) => {
   })
 }
 
+export const getProv = (types, prov, timeEnd) => {
+  return axios({
+    url: `/area/getProvData?types=${types}&prov=${prov}&timeEnd=${timeEnd}`,
+    method: 'get'
+  })
+}
+
+export const getCountyData = (prov, countyType, timeEnd) => {
+  return axios({
+    url: `/area/getCountyData?prov=${prov}&countyType=${countyType}&timeEnd=${timeEnd}`,
+    method: 'get'
+  })
+}
+
 // 默认全部导出
 export default {
   getCharts,
   getMapChart,
-  intotal
+  intotal,
+  getProv,
+  getCountyData
 };
